@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cicd-example-dev
+  namespace: argocd
+  annotations:
+    app-name: cicd-example
+spec:
+  project: default
+  source:
+    repoURL: git@github.com:rafarlopes/example-deployment
+    targetRevision: development
+    path: example
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: development
+
+  syncPolicy:
+    automated: {}
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
+
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas
