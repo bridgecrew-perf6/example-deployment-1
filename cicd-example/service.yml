@@ -2,16 +2,16 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app: example
+    app: cicd-example
     env: development
     type: app
-  name: example
+  name: cicd-example
 spec:
   ports:
   - name: http
     port: 8080
     targetPort: 8080
   selector:
-    app: example
+    app: cicd-example
     env: development
     type: app
