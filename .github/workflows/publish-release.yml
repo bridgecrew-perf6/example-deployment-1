@@ -1,0 +1,72 @@
+name: publish-release
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - production
+    paths-ignore:
+      - '.github/**'
+      - 'README.md'
+      - LICENSE
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+
+jobs:
+  mark-as-released:
+    # Only merged pull requests for the branch releases/**
+    if: ${{ github.event.pull_request.merged == true && startsWith(github.head_ref, 'releases/') }}
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Parse application out of the PR tile
+        id: vars
+        uses: actions/github-script@v6
+        with:
+          script: |
+            /*
+            The purpose of this script is to grab all the PR labels and find out one
+            which follows the pattern `app=xxxx`, where xxxx is the service name.
+            With this information, later on the next step, we call GH API to mark the release
+            as published in the service repository.
+            This script sets an output variable named `application`
+            */
+            const labels = context.payload.pull_request.labels
+            if (labels.length == 0) {
+              return
+            }
+            // checks if we have a label matching the pattern
+            const appLabel = labels.find(l => l.name.startsWith('app='))
+            if (!appLabel) {
+              return
+            }
+            // split the label by `=` and grab the second part (AKA service repository name)
+            // and set it as the output in the variable `repository`
+            const parts = appLabel.name.split('=')
+            if (parts.length === 2) {
+              core.setOutput('repository', parts[1]);
+            }
+      -
+        name: Get latest release
+        if: ${{ steps.vars.outputs.repository != '' }}
+        id: latest-release
+        uses: rafarlopes/get-latest-pre-release-tag-action@v1
+        with:
+          repository: cicd-example
+
+      -
+        name: Publish pre-release
+        if: ${{ steps.latest-release.outputs.id != '' }}
+        uses: actions/github-script@v6
+        id: release
+        with:
+          github-token: ${{ env.GITHUB_TOKEN }}
+          script: |
+            await github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: '${{ steps.vars.outputs.repository }}',
+              release_id: '${{ steps.latest-release.outputs.id }}',
+              prerelease: false,
+            });
+
