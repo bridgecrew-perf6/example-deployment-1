@@ -2,15 +2,15 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: example
+    app: cicd-example
     env: stage
     type: app
-  name: example
+  name: cicd-example
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: example
+      app: cicd-example
       env: stage
       type: app
   strategy:
@@ -20,12 +20,12 @@ spec:
   template:
     metadata:
       labels:
-        app: example
+        app: cicd-example
         env: stage
         type: app
     spec:
       containers:
-        - name: example
+        - name: cicd-example
           image: rafarlopes/cicd-example:363b2b9
           imagePullPolicy: Always
           ports:
