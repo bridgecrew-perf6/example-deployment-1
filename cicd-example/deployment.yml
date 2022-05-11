@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
         - name: cicd-example
-          image: rafarlopes/cicd-example:74e1aa5
+          image: rafarlopes/cicd-example:2eebee6
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
