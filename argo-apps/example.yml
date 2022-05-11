@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cicd-example-stage
+  name: cicd-example-prod
   namespace: argocd
   annotations:
     app-name: cicd-example
@@ -9,11 +9,11 @@ spec:
   project: default
   source:
     repoURL: git@github.com:rafarlopes/example-deployment
-    targetRevision: stage
+    targetRevision: production
     path: example
   destination:
     server: https://kubernetes.default.svc
-    namespace: stage
+    namespace: production
 
   syncPolicy:
     automated: {}

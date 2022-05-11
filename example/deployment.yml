@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   labels:
     app: example
-    env: stage
+    env: production
     type: app
   name: example
 spec:
@@ -11,7 +11,7 @@ spec:
   selector:
     matchLabels:
       app: example
-      env: stage
+      env: production
       type: app
   strategy:
     rollingUpdate:
@@ -21,7 +21,7 @@ spec:
     metadata:
       labels:
         app: example
-        env: stage
+        env: production
         type: app
     spec:
       containers:
