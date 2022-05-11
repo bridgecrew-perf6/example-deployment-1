@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: git@github.com:rafarlopes/example-deployment
     targetRevision: production
-    path: example
+    path: cicd-example
   destination:
     server: https://kubernetes.default.svc
     namespace: production
