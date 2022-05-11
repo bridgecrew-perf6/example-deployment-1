@@ -8,7 +8,7 @@ metadata:
   name: example-ingress
 spec:
   rules:
-  - host: example-dev.rrlopes.com
+  - host: example-stage.rrlopes.com
     http:
       paths:
       - backend:
@@ -20,5 +20,5 @@ spec:
         pathType: Prefix
   tls:
   - hosts:
-    - example-dev.rrlopes.com
-    secretName: example-tls-certificate
+    - example-stage.rrlopes.com
+    secretName: example-stage-tls-certificate

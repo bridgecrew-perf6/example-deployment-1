@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: example
-    env: development
+    env: stage
     type: app
   name: example
 spec:
@@ -13,5 +13,5 @@ spec:
     targetPort: 8080
   selector:
     app: example
-    env: development
+    env: stage
     type: app
